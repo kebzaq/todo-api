@@ -1,0 +1,262 @@
+openapi: 3.0.0
+info:
+  title: ToDo-API
+  contact: {}
+  version: "1.0"
+servers:
+  - url: https://todo-api-06.onrender.com/api/v1
+    variables: {}
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Auth
+      summary: Register User
+      operationId: RegisterUser
+      parameters: []
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/RegisterUserRequest"
+                - example:
+                    name: akai
+                    password: secret
+                    email: akai@test.com
+            example:
+              name: akai
+              password: secret
+              email: akai@test.com
+        required: true
+      responses:
+        "200":
+          description: ""
+          headers: {}
+      deprecated: false
+      security: []
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Login User
+      operationId: LoginUser
+      parameters: []
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/LoginUserRequest"
+                - example:
+                    email: akai@test.com
+                    password: secret
+            example:
+              email: akai@test.com
+              password: secret
+        required: true
+      responses:
+        "200":
+          description: ""
+          headers: {}
+      deprecated: false
+      security: []
+  /todos:
+    post:
+      tags:
+        - Todos
+      summary: Create ToDo
+      operationId: CreateToDo
+      parameters: []
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/CreateToDoRequest"
+                - example:
+                    title: Task 33
+                    description: write code in Javascript to create a website for Kindred Cottage
+            example:
+              title: Task 33
+              description: write code in Javascript to create a website for Kindred Cottage
+        required: true
+      responses:
+        "200":
+          description: ""
+          headers: {}
+      deprecated: false
+      security:
+        - bearer: []
+    get:
+      tags:
+        - Todos
+      summary: Get All ToDos
+      operationId: GetAllToDos
+      parameters: []
+      responses:
+        "200":
+          description: ""
+          headers: {}
+      deprecated: false
+      security:
+        - bearer: []
+  /todos/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: The todo id
+    get:
+      tags:
+        - Todos
+      summary: Get Single ToDo
+      operationId: GetSingleToDo
+      parameters:
+        - name: id
+          in: path
+          description: ""
+          required: true
+          style: simple
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+          headers: {}
+      deprecated: false
+      security:
+        - bearer: []
+    patch:
+      tags:
+        - Todos
+      summary: Update ToDo
+      operationId: UpdateToDo
+      parameters:
+        - name: id
+          in: path
+          description: ""
+          required: true
+          style: simple
+          schema:
+            type: string
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/UpdateToDoRequest"
+                - example:
+                    title: Task 4545
+                    description: updates task 5 description
+            example:
+              title: Task 4545
+              description: updates task 5 description
+        required: true
+      responses:
+        "200":
+          description: ""
+          headers: {}
+      deprecated: false
+      security:
+        - bearer: []
+    delete:
+      tags:
+        - Todos
+      summary: Delete ToDo
+      operationId: DeleteToDo
+      parameters:
+        - name: id
+          in: path
+          description: ""
+          required: true
+          style: simple
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+          headers: {}
+      deprecated: false
+      security:
+        - bearer: []
+components:
+  schemas:
+    RegisterUserRequest:
+      title: RegisterUserRequest
+      required:
+        - name
+        - password
+        - email
+      type: object
+      properties:
+        name:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+      example:
+        name: akai
+        password: secret
+        email: akai@test.com
+    LoginUserRequest:
+      title: LoginUserRequest
+      required:
+        - email
+        - password
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      example:
+        email: akai@test.com
+        password: secret
+    CreateToDoRequest:
+      title: CreateToDoRequest
+      required:
+        - title
+        - description
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+      example:
+        title: Task 33
+        description: write code in Javascript to create a website for Kindred Cottage
+    UpdateToDoRequest:
+      title: UpdateToDoRequest
+      required:
+        - title
+        - description
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+      example:
+        title: Task 4545
+        description: updates task 5 description
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+security: []
+tags:
+  - name: Misc
+    description: ""
+  - name: Auth
+    description: ""
+  - name: Todos
+    description: ""

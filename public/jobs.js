@@ -20,7 +20,7 @@ export const handleJobs = () => {
   jobsTable = document.getElementById("jobs-table");
   jobsTableHeader = document.getElementById("jobs-table-header");
 
-  jobsDiv.addEventListener("click", (e) => {
+  jobsDiv.addEventListener("click", async (e) => {
     if (inputEnabled && e.target.nodeName === "BUTTON") {
       if (e.target === addJob) {
         showAddEdit(null);
@@ -36,8 +36,32 @@ export const handleJobs = () => {
         message.textContent = "";
         showAddEdit(e.target.dataset.id);
       } else if (e.target.classList.contains("deleteButton")) {
-        message.textContent = "";
-        showDelete(e.target.dataset.id);
+        enableInput(false);
+        // showDelete(e.target.dataset.id);
+        let method = "DELETE";
+        let url = `/api/v1/todos/${e.target.dataset.id}`;
+        try {
+          const response = await fetch(url, {
+            method: method,
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          const data = await response.json();
+          if (response.status === 200 || response.status === 204) {
+            message.textContent = data.msg;
+            await showJobs();
+          } else {
+            message.textContent = data.msg;
+          }
+        } catch (err) {
+          console.log(err);
+          message.textContent = "A communication error occurred.";
+        }
+
+        enableInput(true);
       }
     }
   });

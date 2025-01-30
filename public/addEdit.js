@@ -78,11 +78,10 @@ export const handleAddEdit = () => {
             });
 
             const data = await response.json();
-            if (response.status === 200 || response.status === 201) {
-              showJobs();
+            if (response.status === 200 || response.status === 204) {
               message.textContent = data.msg;
+              await showJobs();
             } else {
-              showJobs();
               message.textContent = data.msg;
             }
           } catch (err) {

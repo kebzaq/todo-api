@@ -26,42 +26,41 @@ export const handleAddEdit = () => {
         if (addingJob.textContent === "update") {
           method = "PATCH";
           url = `/api/v1/todos/${addEditDiv.dataset.id}`;
+        }
+        try {
+          const response = await fetch(url, {
+            method: method,
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              title: title.value,
+              description: description.value,
+              status: status.value,
+            }),
+          });
 
-          try {
-            const response = await fetch(url, {
-              method: method,
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
-              body: JSON.stringify({
-                title: title.value,
-                description: description.value,
-                status: status.value,
-              }),
-            });
-
-            const data = await response.json();
-            if (response.status === 200 || response.status === 201) {
-              if (response.status === 200) {
-                // a 200 is expected for a successful update
-                message.textContent = "The job entry was updated.";
-              } else {
-                // a 201 is expected for a successful create
-                message.textContent = "The job entry was created.";
-              }
-              title.value = "";
-              description.value = "";
-              status.value = "pending";
-
-              showJobs();
+          const data = await response.json();
+          if (response.status === 200 || response.status === 201) {
+            if (response.status === 200) {
+              // a 200 is expected for a successful update
+              message.textContent = "The job entry was updated.";
             } else {
-              message.textContent = data.msg;
+              // a 201 is expected for a successful create
+              message.textContent = "The job entry was created.";
             }
-          } catch (err) {
-            console.log(err);
-            message.textContent = "A communication error occurred.";
+            title.value = "";
+            description.value = "";
+            status.value = "pending";
+
+            showJobs();
+          } else {
+            message.textContent = data.msg;
           }
+        } catch (err) {
+          console.log(err);
+          message.textContent = "A communication error occurred.";
         }
 
         // delete

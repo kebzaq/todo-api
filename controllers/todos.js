@@ -57,7 +57,7 @@ const deleteToDo = async (req, res) => {
   if (!todo) {
     throw new NotFoundError(`No todo task found with id: ${todoId}`);
   }
-  res.status(StatusCodes.NO_CONTENT).send();
+  res.status(StatusCodes.OK).json({ msg: "The entry was deleted." });
 };
 
 module.exports = { getAllToDos, getToDo, createToDo, updateToDo, deleteToDo };
